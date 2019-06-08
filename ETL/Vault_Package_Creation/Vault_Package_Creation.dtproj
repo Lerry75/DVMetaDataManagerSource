@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DeploymentModel>Project</DeploymentModel>
+  <ProductVersion>14.0.800.90</ProductVersion>
+  <SchemaVersion>9.0.1.0</SchemaVersion>
+  <State>$base64$PFNvdXJjZUNvbnRyb2xJbmZvIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOmRkbDI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDAzL2VuZ2luZS8yIiB4bWxuczpkZGwyXzI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDAzL2VuZ2luZS8yLzIiIHhtbG5zOmRkbDEwMF8xMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDA4L2VuZ2luZS8xMDAvMTAwIiB4bWxuczpkZGwyMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEwL2VuZ2luZS8yMDAiIHhtbG5zOmRkbDIwMF8yMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEwL2VuZ2luZS8yMDAvMjAwIiB4bWxuczpkZGwzMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDExL2VuZ2luZS8zMDAiIHhtbG5zOmRkbDMwMF8zMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDExL2VuZ2luZS8zMDAvMzAwIiB4bWxuczpkZGw0MDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEyL2VuZ2luZS80MDAiIHhtbG5zOmRkbDQwMF80MDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEyL2VuZ2luZS80MDAvNDAwIiB4bWxuczpkZGw1MDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEzL2VuZ2luZS81MDAiIHhtbG5zOmRkbDUwMF81MDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEzL2VuZ2luZS81MDAvNTAwIiB4bWxuczpkd2Q9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vRGF0YVdhcmVob3VzZS9EZXNpZ25lci8xLjAiPg0KICA8RW5hYmxlZD50cnVlPC9FbmFibGVkPg0KICA8UHJvamVjdE5hbWU+U0FLPC9Qcm9qZWN0TmFtZT4NCiAgPEF1eFBhdGg+U0FLPC9BdXhQYXRoPg0KICA8TG9jYWxQYXRoPlNBSzwvTG9jYWxQYXRoPg0KICA8UHJvdmlkZXI+U0FLPC9Qcm92aWRlcj4NCjwvU291cmNlQ29udHJvbEluZm8+</State>
+  <Database>
+    <Name>EDW_Package_Creation.database</Name>
+    <FullPath>EDW_Package_Creation.database</FullPath>
+  </Database>
+  <DataSources />
+  <DataSourceViews />
+  <DeploymentModelSpecificContent>
+    <Manifest>
+      <SSIS:Project SSIS:ProtectionLevel="EncryptSensitiveWithUserKey" xmlns:SSIS="www.microsoft.com/SqlServer/SSIS">
+        <SSIS:Properties>
+          <SSIS:Property SSIS:Name="ID">{4ac0f837-05fc-4843-9fd7-2df9af3f9dd2}</SSIS:Property>
+          <SSIS:Property SSIS:Name="Name">Vault_Package_Creation</SSIS:Property>
+          <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
+          <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+          <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
+          <SSIS:Property SSIS:Name="VersionComments">
+          </SSIS:Property>
+          <SSIS:Property SSIS:Name="CreationDate">2016-12-22T10:36:02.7210692+01:00</SSIS:Property>
+          <SSIS:Property SSIS:Name="CreatorName">
+          </SSIS:Property>
+          <SSIS:Property SSIS:Name="CreatorComputerName">
+          </SSIS:Property>
+          <SSIS:Property SSIS:Name="Description">
+          </SSIS:Property>
+          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAjDNmU3zFaE2X0S0z/V3hWwAAAAACAAAAAAAQZgAAAAEAACAAAAC8EODYOyQ7gi+DcZm8b/TidcjPCfQfg2QGxa7Uulv9HQAAAAAOgAAAAAIAACAAAABhW8mMzSSH8/r/cvw0+jAYMAQKFUlH33FmRwBhh/hdeZAAAADuoWKksYKZztHb+/UxnpL/iHs1AV+94WKy3lmHbFG1Mg2Hzd9dF0scJbyd9BjhfL7GK2WfvHPQevoStW+9k1gRL1GN1dIYkI5mJ0LdxTxcNqoX8Ua5v4CO6CCo818LXWUprImKF8NcFrgur8umGeQf5pisVZnQgdTxE6kl16r+nbMZv4zK2rlzF8dD3lLGg+ZAAAAAeuF5Z0Rv44Ebzrz6XXFlLCfrefjcq6I7B52CJdwM/jZg9J+pGMvlgWya5/tI3l7Vm1mw6I7DefCktGttYWW6Pg==</SSIS:Property>
+          <SSIS:Property SSIS:Name="FormatVersion">1</SSIS:Property>
+        </SSIS:Properties>
+        <SSIS:Packages />
+        <SSIS:ConnectionManagers />
+        <SSIS:DeploymentInfo>
+          <SSIS:ProjectConnectionParameters />
+          <SSIS:PackageInfo />
+        </SSIS:DeploymentInfo>
+      </SSIS:Project>
+    </Manifest>
+  </DeploymentModelSpecificContent>
+  <ControlFlowParts />
+  <Miscellaneous>
+    <ProjectItem>
+      <Name>0_Environments.biml</Name>
+      <FullPath>0_Environments.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>1_Projects.biml</Name>
+      <FullPath>1_Projects.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>2_Packages.biml</Name>
+      <FullPath>2_Packages.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>999_Debug.biml</Name>
+      <FullPath>999_Debug.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Master_Tasks_Business.biml</Name>
+      <FullPath>Master_Tasks_Business.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Master_Tasks_EDW.biml</Name>
+      <FullPath>Master_Tasks_EDW.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Master_Tasks_Entity.biml</Name>
+      <FullPath>Master_Tasks_Entity.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Master_Tasks_Extract.biml</Name>
+      <FullPath>Master_Tasks_Extract.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Master_Template.biml</Name>
+      <FullPath>Master_Template.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>MetaAdapter.cs</Name>
+      <FullPath>MetaAdapter.cs</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Container_SEQ_Error_Handling.biml</Name>
+      <FullPath>Package_Container_SEQ_Error_Handling.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Container_SEQ_Finalize.biml</Name>
+      <FullPath>Package_Container_SEQ_Finalize.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Container_SEQ_Initialize.biml</Name>
+      <FullPath>Package_Container_SEQ_Initialize.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_EMPTY.biml</Name>
+      <FullPath>Package_Dataflow_Entity_EMPTY.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_Hub.biml</Name>
+      <FullPath>Package_Dataflow_Entity_Hub.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_SAL.biml</Name>
+      <FullPath>Package_Dataflow_Entity_SAL.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_Lnk.biml</Name>
+      <FullPath>Package_Dataflow_Entity_Lnk.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_Pit.biml</Name>
+      <FullPath>Package_Dataflow_Entity_Pit.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_RSat.biml</Name>
+      <FullPath>Package_Dataflow_Entity_RSat.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_Sat.biml</Name>
+      <FullPath>Package_Dataflow_Entity_Sat.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_TLnk.biml</Name>
+      <FullPath>Package_Dataflow_Entity_TLnk.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Entity_TSat.biml</Name>
+      <FullPath>Package_Dataflow_Entity_TSat.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_Extract.biml</Name>
+      <FullPath>Package_Dataflow_Extract.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Dataflow_LogEvents.biml</Name>
+      <FullPath>Package_Dataflow_LogEvents.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Events.biml</Name>
+      <FullPath>Package_Events.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_ExecuteSQL_Finalize.biml</Name>
+      <FullPath>Package_ExecuteSQL_Finalize.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_ExecuteSQL_Initialize.biml</Name>
+      <FullPath>Package_ExecuteSQL_Initialize.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_ExecuteSQL_UpdateEndDate.biml</Name>
+      <FullPath>Package_ExecuteSQL_UpdateEndDate.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_LogEvents.biml</Name>
+      <FullPath>Package_LogEvents.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_ScriptTask_LoadDate.biml</Name>
+      <FullPath>Package_ScriptTask_LoadDate.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Template.biml</Name>
+      <FullPath>Package_Template.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Package_Template_Extract.biml</Name>
+      <FullPath>Package_Template_Extract.biml</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Project_Variables.biml</Name>
+      <FullPath>Project_Variables.biml</FullPath>
+    </ProjectItem>
+  </Miscellaneous>
+  <Configurations>
+    <Configuration>
+      <Name>Development</Name>
+      <Options>
+        <OutputPath>bin</OutputPath>
+        <ConnectionMappings />
+        <ConnectionProviderMappings />
+        <ConnectionSecurityMappings />
+        <DatabaseStorageLocations />
+        <TargetServerVersion>SQLServer2016</TargetServerVersion>
+        <ParameterConfigurationValues>
+          <ConfigurationSetting>
+            <Id>LastModifiedTime</Id>
+            <Name>LastModifiedTime</Name>
+            <Value xsi:type="xsd:dateTime">2017-01-12T12:45:35.4557226Z</Value>
+          </ConfigurationSetting>
+        </ParameterConfigurationValues>
+      </Options>
+    </Configuration>
+  </Configurations>
+</Project>

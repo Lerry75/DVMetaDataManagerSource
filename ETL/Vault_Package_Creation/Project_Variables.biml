@@ -1,0 +1,21 @@
+<#
+/* Please change following variables */
+int ProcessId = 1;
+string ProcessName = "MyProcess";
+string FlowName = "EDW_MyProcess";
+string SsisProjectFolder = @"C:\TFS\Azure\Lerry\DVAutomation\Main\DV2.0\ETL\Vault_Package_Creation";
+/*************************************/
+
+string LoadDate = "18000101";
+
+string ServerName = @"(LocalDB)\DV2016";
+string MetaCatalog = "DVMeta";
+string EDWCatalog = "TEMP_DV_2016";
+string LogCatalog = "DVLog";
+string StagingCatalog = "TEMP_DVStaging_2016";
+
+string ConnGuidEDW = "{488D5090-6245-43B7-BD87-93D0651A95AA}";
+string ConnGuidLog = "{5CA284F8-C9C0-4C13-AC70-12AFB6811624}";
+string ConnGuidStaging = "{EE7476AF-2D8E-4435-942B-F6FC6B076B2C}";
+
+#>

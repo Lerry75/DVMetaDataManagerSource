@@ -1,0 +1,10 @@
+﻿
+CREATE FUNCTION [dbo].[GetHash]
+(
+	@value VARCHAR(8000)
+)
+RETURNS CHAR(40)
+AS
+BEGIN
+	RETURN CONVERT(char(40), HASHBYTES('SHA1', UPPER(@value)), 2)
+END

@@ -1,0 +1,71 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="MasterType" type="String" #>
+
+<Package Name="Master_<#=MasterType#>" ProtectionLevel="EncryptSensitiveWithUserKey" LoggingMode="Enabled">
+
+    <Connections>
+<#
+foreach (var x in RootNode.Projects.SelectMany(x => x.AllDefinedSuccessors()).OfType<AstConnectionReferenceBaseNode>())
+{
+    WriteLine(x.GetBiml());
+}
+#>
+    </Connections>
+
+    <Tasks>
+    
+        <#=CallBimlScript("Package_Container_SEQ_Initialize.biml")#>
+        
+        <Container Name="SEQ Main">
+<#
+switch (MasterType) 
+{
+    case "Extract":
+#>  
+            <#=CallBimlScript("Master_Tasks_Extract.biml")#>
+<#
+        break;
+    case "Hub":
+    case "Lnk":
+    case "Sat":
+#>  
+            <#=CallBimlScript("Master_Tasks_Entity.biml", MasterType)#>
+<#
+        break;
+    case "EDW":
+#>  
+            <#=CallBimlScript("Master_Tasks_EDW.biml")#>
+<#
+        break;
+    case "BIZ":
+#>  
+            <#=CallBimlScript("Master_Tasks_Business.biml")#>
+<#
+        break;
+}
+#>
+        	<PrecedenceConstraints>
+        		<Inputs>
+        			<Input OutputPathName="SEQ Initialize.Output" />
+        		</Inputs>
+        	</PrecedenceConstraints>
+        </Container>
+            
+        <#=CallBimlScript("Package_Container_SEQ_Finalize.biml")#>
+
+        <#=CallBimlScript("Package_Container_SEQ_Error_Handling.biml")#>
+    </Tasks>
+        
+    <#=CallBimlScript("Package_LogEvents.biml")#>
+
+    <LogProviders>
+       <SqlServerLogProvider ConnectionName="<#=LogCatalog#>" Name="SSIS log provider for SQL Server" />
+    </LogProviders>
+    
+    <Variables>
+        <Variable DataType="DateTime" Name="LoadDate">1800-01-01</Variable>
+    </Variables>
+
+    <#=CallBimlScript("Package_Events.biml")#>
+
+</Package>

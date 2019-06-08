@@ -1,0 +1,18 @@
+<#@ template language="C#" tier="1"#>
+<#@ include file="Project_Variables.biml" #>
+
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Projects>
+        <PackageProject Name="EDW_Package_Creation">
+            <Connections>
+                <Connection ConnectionName="<#=EDWCatalog#>" Id="<#=ConnGuidEDW#>" />
+                <Connection ConnectionName="<#=LogCatalog#>" Id="<#=ConnGuidLog#>" />
+                <Connection ConnectionName="<#=StagingCatalog#>" Id="<#=ConnGuidStaging#>" />
+            </Connections>
+            <Parameters>
+                <Parameter Name="FlowName" DataType="String" IsRequired="true" IsSensitive="false"><#=FlowName#></Parameter>
+                <Parameter Name="LoadDate" DataType="String" IsRequired="true" IsSensitive="false"><#=LoadDate#></Parameter>
+            </Parameters>
+        </PackageProject>
+    </Projects>
+</Biml>

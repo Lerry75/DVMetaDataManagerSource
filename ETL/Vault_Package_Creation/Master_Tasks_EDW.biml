@@ -1,0 +1,21 @@
+<Tasks>
+    <ExecutePackage Name="PCK Master_Hub" LoggingMode="Disabled">
+        <ExternalProjectPackage Package="Master_Hub.dtsx" />
+    </ExecutePackage>
+    <ExecutePackage Name="PCK Master_Lnk" LoggingMode="Disabled">
+        <ExternalProjectPackage Package="Master_Lnk.dtsx" />
+        <PrecedenceConstraints>
+            <Inputs>
+        	    <Input OutputPathName="PCK Master_Hub.Output" />
+            </Inputs>
+        </PrecedenceConstraints>
+    </ExecutePackage>
+    <ExecutePackage Name="PCK Master_Sat" LoggingMode="Disabled">
+        <ExternalProjectPackage Package="Master_Sat.dtsx" />
+        <PrecedenceConstraints>
+            <Inputs>
+        	    <Input OutputPathName="PCK Master_Lnk.Output" />
+            </Inputs>
+        </PrecedenceConstraints>
+    </ExecutePackage>
+</Tasks>

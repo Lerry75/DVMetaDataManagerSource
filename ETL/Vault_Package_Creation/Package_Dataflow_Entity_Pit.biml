@@ -1,0 +1,112 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="EntityId" type="Int32" #>
+<#@ property name="EntityName" type="String" #>
+<#@ property name="EntityType" type="String" #>
+<#@ property name="EntityTableName" type="String" #>
+<#@ property name="EntityNameStaging" type="String" #>
+<#@ property name="EntityViewNameStaging" type="String" #>
+
+<#
+var EntityViewColumns = MetaAdapter.GetColumns(EntityId, false);
+var LookupColumns = MetaAdapter.GetColumns(EntityId, true);
+string EntityViewColumnList = MetaAdapter.GetStringColumnList(EntityViewColumns, false);
+string LookupColumnList = MetaAdapter.GetStringColumnList(LookupColumns, false);
+var KeyColumn = LookupColumns.Where(x => x.ReferencedEntityId != 0).First();
+#>
+
+<Dataflow Name="DFL <#=EntityType#>_<#=EntityName#>" LoggingMode="Enabled">
+                    
+    <#=CallBimlScript("Package_Dataflow_LogEvents.biml")#>
+    
+    <LogProviders>
+        <SqlServerLogProvider ConnectionName="<#=LogCatalog#>" Name="SSIS log provider for SQL Server" />
+    </LogProviders>
+    
+    <Annotations>
+		<Annotation AnnotationType="Description">Data Flow Task</Annotation>
+	</Annotations>
+      
+    <Transformations>
+	
+        <OleDbSource Name="SRC <#=EntityName#>" ConnectionName="<#=EDWCatalog#>">
+    	    <DirectInput>
+EXEC <#=EntityViewNameStaging#> @SnapshotDate = ?;
+            </DirectInput>
+			<Parameters>
+                <Parameter Name="@SnapshotDate:Input" VariableName="User.LoadDate" />
+            </Parameters>
+            <Columns>
+                <Column SourceColumn="SnapshotDate" SortKeyPosition="1" />
+                <Column SourceColumn="<#=KeyColumn.ColumnName#>" SortKeyPosition="2" />
+            </Columns>
+	    </OleDbSource>
+            
+	    <OleDbSource Name="SRC <#=EntityType#>_<#=EntityName#>" ConnectionName="<#=EDWCatalog#>">
+	        <DirectInput>
+DECLARE @SnapshotDate datetime2 = ?;
+SELECT [SnapshotDate] = @SnapshotDate
+  ,<#=KeyColumn.ColumnNameBraket#>
+FROM <#=EntityTableName#>
+WHERE [SnapshotDate] = @SnapshotDate
+ORDER BY [SnapshotDate]
+  ,<#=KeyColumn.ColumnNameBraket#>;
+            </DirectInput>
+	        <Parameters>
+			    <!--Parameter Name="Parameter0:Input" /!-->
+			    <Parameter Name="0" VariableName="User.LoadDate"/>
+	        </Parameters>
+    		<Columns>
+                <Column SourceColumn="SnapshotDate" TargetColumn="<#=EntityType#>_SnapshotDate" SortKeyPosition="1" />
+                <Column SourceColumn="<#=KeyColumn.ColumnName#>" SortKeyPosition="2" />
+            </Columns>
+        </OleDbSource>
+	
+	    <MergeJoin Name="MRG SnapshotDate" JoinType="LeftOuterJoin">
+    		<LeftInputPath SsisName="Merge Join Left Input" OutputPathName="SRC <#=EntityName#>.Output">
+	    	    <Columns>		
+<#
+foreach (var item in EntityViewColumns) 
+{
+#>
+		            <Column SourceColumn="<#=item.ColumnName#>" IsUsed="true" />
+<#    
+}
+#>	 
+                </Columns>
+		    </LeftInputPath>
+		
+    		<RightInputPath SsisName="Merge Join Right Input" OutputPathName="SRC <#=EntityType#>_<#=EntityName#>.Output">
+    			<Columns>
+    				<Column SourceColumn="<#=EntityType#>_SnapshotDate" IsUsed="true" />
+    				<Column SourceColumn="<#=KeyColumn.ColumnName#>" IsUsed="false" />
+    			</Columns>
+    		</RightInputPath>
+            <JoinKeys>
+                <JoinKey LeftColumn="SnapshotDate" RightColumn="<#=EntityType#>_SnapshotDate" />
+                <JoinKey LeftColumn="<#=KeyColumn.ColumnName#>" RightColumn="<#=KeyColumn.ColumnName#>" />
+            </JoinKeys>
+	    </MergeJoin>
+	        
+    	<ConditionalSplit Name="CON New rows">
+    		<InputPath SsisName="Conditional Split Input" OutputPathName="MRG SnapshotDate.Output" />
+    		<OutputPaths>
+    			<OutputPath Name="New rows">
+    			   <Expression>ISNULL(<#=EntityType#>_SnapshotDate)</Expression>
+    			</OutputPath>
+    		</OutputPaths>
+    	</ConditionalSplit>
+        
+        <OleDbDestination Name="DST <#=EntityType#>_<#=EntityName#>" ConnectionName="<#=EDWCatalog#>">
+            <InputPath SsisName="OLE DB Destination Input" OutputPathName="CON New rows.New rows" />
+    	    <ExternalTableOutput Table="<#=EntityTableName#>" />
+        </OleDbDestination>
+		
+    </Transformations>
+        	        
+    <PrecedenceConstraints>
+        <Inputs>
+            <Input OutputPathName="SQL Initialize <#=EntityType#>_<#=EntityName#>.Output" SsisName="Constraint" />
+        </Inputs>
+    </PrecedenceConstraints>
+        
+</Dataflow>

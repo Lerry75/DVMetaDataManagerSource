@@ -1,0 +1,130 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="EntityId" type="Int32" #>
+<#@ property name="EntityName" type="String" #>
+<#@ property name="EntityType" type="String" #>
+<#@ property name="EntityTableName" type="String" #>
+<#@ property name="EntityNameStaging" type="String" #>
+<#@ property name="EntityViewNameStaging" type="String" #>
+
+<#
+var EntityViewColumns = MetaAdapter.GetColumns(EntityId, false);
+var LookupColumns = MetaAdapter.GetColumns(EntityId, true);
+string EntityViewColumnList = MetaAdapter.GetStringColumnList(EntityViewColumns, false);
+string LookupColumnList = MetaAdapter.GetStringColumnList(LookupColumns, false);
+#>
+               
+<Dataflow Name="DFL <#=EntityType#>_<#=EntityName#>" LoggingMode="Enabled">
+                   
+    <#=CallBimlScript("Package_Dataflow_LogEvents.biml")#>
+        
+    <LogProviders>
+        <SqlServerLogProvider ConnectionName="<#=LogCatalog#>" Name="SSIS log provider for SQL Server" />
+    </LogProviders>
+    
+	<Annotations>
+        <Annotation AnnotationType="Description">Data Flow Task</Annotation>
+    </Annotations>
+    
+    <Transformations>
+        <OleDbSource Name="SRC <#=EntityNameStaging#>" ConnectionName="<#=StagingCatalog#>">
+            <DirectInput>
+SELECT DISTINCT 
+  <#=EntityViewColumnList#> 
+FROM <#=EntityViewNameStaging#> 
+WHERE LoadDate = ?
+            </DirectInput>
+            <Parameters>
+             <!--Parameter Name="Parameter0:Input" /!-->
+                <Parameter Name="0" VariableName="User.LoadDate"/>
+            </Parameters>
+        </OleDbSource>
+        
+<#
+string InputPath = "SRC " + EntityNameStaging + ".Output";
+
+foreach (var item in LookupColumns.Where((x => x.ReferencedEntityId != 0)))
+{
+    EntityInfo RefEntity = MetaAdapter.GetEntityInfo(item.ReferencedEntityId);
+    var RefColumns = MetaAdapter.GetColumns(item.ReferencedEntityId, false);
+    string RefColumnName = string.Empty;
+    string RefColumnNameBraket = string.Empty;
+    
+    foreach (var col in RefColumns.Where((x => x.IsHashKey)))
+    {
+        RefColumnName = col.ColumnName;
+        RefColumnNameBraket = col.ColumnNameBraket;
+        
+        break;
+    }
+#>
+        <Lookup Name="LKP <#=RefEntity.EntityName#>_<#=item.ColumnName#>" NoMatchBehavior="RedirectRowsToNoMatchOutput" OleDbConnectionName="<#=EDWCatalog#>">
+            <DirectInput>
+SELECT <#=RefColumnNameBraket#>
+FROM <#=RefEntity.EntityTableName#></DirectInput>
+            <Parameters>
+                <Parameter SourceColumn="<#=item.ColumnName#>" />
+			</Parameters>
+            <InputPath OutputPathName="<#=InputPath#>" />
+            <Inputs>
+                <Column SourceColumn="<#=item.ColumnName#>" TargetColumn="<#=RefColumnName#>" />
+			</Inputs>
+		</Lookup>
+
+<#  
+string InputPathNoMatch = "LKP " + RefEntity.EntityName + "_" + item.ColumnName + ".NoMatch";
+string LookupErrorTable = MetaAdapter.EntityTableNameLookupError(EntityId, RefEntity.EntityId, item.HashKeySuffix);
+#>
+    	<OleDbDestination Name="DST Error LKP <#=RefEntity.EntityName#>_<#=item.ColumnName#>" ConnectionName="<#=EDWCatalog#>" KeepNulls="true">
+    		<InputPath SsisName="OLE DB Destination Input" OutputPathName="<#=InputPathNoMatch#>" />
+    	    <ExternalTableOutput Table="<#=LookupErrorTable#>"/>
+    	</OleDbDestination>   
+            	
+<#
+    InputPath = "LKP " + RefEntity.EntityName + "_" + item.ColumnName + ".Match";
+}
+#>
+
+    	
+    	<Lookup Name="LKP <#=EntityType#>_<#=EntityName#>" NoMatchBehavior="RedirectRowsToNoMatchOutput" OleDbConnectionName="<#=EDWCatalog#>">
+			<DirectInput>
+SELECT 
+  <#=LookupColumnList#>
+FROM <#=EntityTableName#>
+	    	</DirectInput>
+            <Parameters>
+<#
+foreach (var item in LookupColumns)
+{
+#>
+                <Parameter SourceColumn="<#=item.ColumnName#>" />
+<#
+}
+#>
+            </Parameters>
+            <InputPath SsisName="Lookup Input" OutputPathName="<#=InputPath#>" />
+            <Inputs>
+<#
+foreach (var item in LookupColumns)
+{
+#>
+                <Column SourceColumn="<#=item.ColumnName#>" TargetColumn="<#=item.ColumnName#>" />
+<#
+}
+#>
+            </Inputs>
+        </Lookup>
+
+        <OleDbDestination Name="DST <#=EntityType#>_<#=EntityName#>" ConnectionName="<#=EDWCatalog#>" KeepNulls="true">
+			<InputPath SsisName="OLE DB Destination Input" OutputPathName="LKP <#=EntityType#>_<#=EntityName#>.NoMatch" />
+            <ExternalTableOutput Table="<#=EntityTableName#>" />
+        </OleDbDestination>  
+
+    </Transformations>
+
+    <PrecedenceConstraints>
+        <Inputs>
+	        <Input OutputPathName="SQL Initialize <#=EntityType#>_<#=EntityName#>.Output" SsisName="Constraint" />
+        </Inputs>
+    </PrecedenceConstraints>
+        	             
+</Dataflow>

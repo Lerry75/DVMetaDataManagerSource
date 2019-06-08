@@ -1,0 +1,24 @@
+<#@ include file="Project_Variables.biml" #>
+
+<#@ property name="ProcessName" type="String" #>
+
+
+<Dataflow Name="DFL <#=ProcessName#>" LoggingMode="Enabled">
+                   
+    <LogEvents>
+        <LogEvent EventName="BufferSizeTuning" />
+        <LogEvent EventName="OnError" />
+        <LogEvent EventName="OnInformation" />
+        <LogEvent EventName="OnPostExecute" />
+        <LogEvent EventName="OnPreExecute" />
+        <LogEvent EventName="OnTaskFailed" />
+        <LogEvent EventName="PipelineBufferLeak" />
+    </LogEvents>
+        
+    <LogProviders>
+        <SqlServerLogProvider ConnectionName="<#=LogCatalog#>" Name="SSIS log provider for SQL Server" />
+    </LogProviders>
+
+    <Transformations/>
+
+</Dataflow>

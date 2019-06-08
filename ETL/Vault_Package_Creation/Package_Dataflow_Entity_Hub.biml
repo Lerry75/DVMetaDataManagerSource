@@ -1,0 +1,113 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="EntityId" type="Int32" #>
+<#@ property name="EntityName" type="String" #>
+<#@ property name="EntityType" type="String" #>
+<#@ property name="EntityTableName" type="String" #>
+<#@ property name="EntityNameStaging" type="String" #>
+<#@ property name="EntityViewNameStaging" type="String" #>
+
+<#
+var EntityViewColumns = MetaAdapter.GetColumns(EntityId, false);
+var LookupColumns = MetaAdapter.GetColumns(EntityId, true);
+string EntityViewColumnList = MetaAdapter.GetStringColumnList(EntityViewColumns, false);
+string LookupColumnList = MetaAdapter.GetStringColumnList(LookupColumns, true);
+#>
+               
+<Dataflow Name="DFL <#=EntityType#>_<#=EntityName#>" LoggingMode="Enabled">
+                   
+	<#=CallBimlScript("Package_Dataflow_LogEvents.biml")#>
+        
+    <LogProviders>
+        <SqlServerLogProvider ConnectionName="<#=LogCatalog#>" Name="SSIS log provider for SQL Server" />
+    </LogProviders>
+    
+    <Transformations>
+        <OleDbSource Name="SRC <#=EntityNameStaging#>" ConnectionName="<#=StagingCatalog#>">
+            <DirectInput>
+SELECT DISTINCT 
+  <#=EntityViewColumnList#> 
+FROM <#=EntityViewNameStaging#> 
+WHERE LoadDate = ?
+            </DirectInput>
+            <Parameters>
+             <!--Parameter Name="Parameter0:Input" /!-->
+                <Parameter Name="0" VariableName="User.LoadDate"/>
+            </Parameters>
+        </OleDbSource>
+        
+        <DerivedColumns Name="DER Upper Key">
+            <InputPath OutputPathName="SRC <#=EntityNameStaging#>.Output" />
+<#
+if (LookupColumns.Where(x => x.SqlDataType.ToLower().Contains("char")).Count() != 0)
+{
+#>
+            <Columns>
+<#
+    foreach (var item in LookupColumns.Where(x => x.SqlDataType.ToLower().Contains("char"))) 
+    {
+        if (item.SqlDataType.ToLower().Contains("nvarchar")) 
+        {
+#>
+                <Column Name="<#=item.ColumnName#>_UPPER" DataType="String" Length="<#=item.DataTypeSize#>">(DT_WSTR,<#=item.DataTypeSize#>)UPPER(<#=item.ColumnNameBraket#>)</Column>
+<#
+        } 
+        else
+        {
+#>
+                <Column Name="<#=item.ColumnName#>_UPPER" CodePage="1252" DataType="AnsiString" Length="<#=item.DataTypeSize#>">(DT_STR,<#=item.DataTypeSize#>,1252)UPPER(<#=item.ColumnNameBraket#>)</Column>
+<#
+        }
+    }
+#>
+            </Columns>
+<#
+}
+#>
+        </DerivedColumns>
+     
+    	<Lookup Name="LKP <#=EntityType#>_<#=EntityName#>" NoMatchBehavior="RedirectRowsToNoMatchOutput" OleDbConnectionName="<#=EDWCatalog#>">
+			<DirectInput>
+SELECT 
+  <#=LookupColumnList#>
+FROM <#=EntityTableName#>
+	    	</DirectInput>
+            <Parameters>
+<#
+foreach (var item in LookupColumns) 
+{
+#>
+                <Parameter SourceColumn="<#=item.ColumnName#>" />
+<#
+}
+#>
+            </Parameters>
+            <InputPath SsisName="Lookup Input" OutputPathName="DER Upper Key.Output" />
+            <Inputs>
+<#
+foreach (var item in LookupColumns) 
+{
+    string SourceColumnName = item.ColumnName;
+    if (item.SqlDataType.ToLower().Contains("char"))
+        SourceColumnName += "_UPPER";
+#>
+                <Column SourceColumn="<#=SourceColumnName#>" TargetColumn="<#=item.ColumnName#>" />
+<#
+}
+#>
+            </Inputs>
+        </Lookup>
+
+        <OleDbDestination Name="DST <#=EntityType#>_<#=EntityName#>" ConnectionName="<#=EDWCatalog#>" KeepNulls="true">
+			<InputPath SsisName="OLE DB Destination Input" OutputPathName="LKP <#=EntityType#>_<#=EntityName#>.NoMatch" />
+            <ExternalTableOutput Table="<#=EntityTableName#>" />
+        </OleDbDestination>  
+
+    </Transformations>
+
+    <PrecedenceConstraints>
+        <Inputs>
+	        <Input OutputPathName="SQL Initialize <#=EntityType#>_<#=EntityName#>.Output" SsisName="Constraint" />
+        </Inputs>
+    </PrecedenceConstraints>
+        	             
+</Dataflow>

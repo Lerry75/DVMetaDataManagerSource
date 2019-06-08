@@ -1,0 +1,13 @@
+<#@ include file="Project_Variables.biml" #>
+<Tasks>
+<#
+foreach (string file in System.IO.Directory.GetFiles(SsisProjectFolder, "Extract_*.dtsx", System.IO.SearchOption.TopDirectoryOnly))
+{
+#>
+    <ExecutePackage Name="PCK <#=System.IO.Path.GetFileNameWithoutExtension(file)#>" LoggingMode="Disabled">
+        <ExternalProjectPackage Package="<#=System.IO.Path.GetFileName(file)#>" />
+    </ExecutePackage>
+<#
+}
+#>
+</Tasks>

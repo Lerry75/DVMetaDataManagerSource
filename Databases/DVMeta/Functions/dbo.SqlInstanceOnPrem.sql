@@ -1,0 +1,6 @@
+﻿CREATE FUNCTION [dbo].[SqlInstanceOnPrem] ()
+RETURNS bit
+AS
+BEGIN
+	RETURN CASE WHEN SERVERPROPERTY('InstanceDefaultDataPath') IS NULL THEN 0 ELSE 1 END;
+END

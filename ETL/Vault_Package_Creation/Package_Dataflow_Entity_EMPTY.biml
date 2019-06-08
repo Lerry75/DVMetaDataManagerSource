@@ -1,0 +1,32 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="EntityName" type="String" #>
+<#@ property name="EntityType" type="String" #>
+<#@ property name="EntityTableName" type="String" #>
+<#@ property name="EntityNameStaging" type="String" #>
+<#@ property name="EntityViewNameStaging" type="String" #>
+
+<Dataflow Name="DFL <#=EntityType#>_<#=EntityName#>" LoggingMode="Enabled">
+                   
+    <LogEvents>
+        <LogEvent EventName="BufferSizeTuning" />
+        <LogEvent EventName="OnError" />
+        <LogEvent EventName="OnInformation" />
+        <LogEvent EventName="OnPostExecute" />
+        <LogEvent EventName="OnPreExecute" />
+        <LogEvent EventName="OnTaskFailed" />
+        <LogEvent EventName="PipelineBufferLeak" />
+    </LogEvents>
+        
+    <LogProviders>
+        <SqlServerLogProvider ConnectionName="<#=LogCatalog#>" Name="SSIS log provider for SQL Server" />
+    </LogProviders>
+
+    <Transformations/>
+
+    <PrecedenceConstraints>
+        <Inputs>
+	        <Input OutputPathName="SQL Initialize <#=EntityType#>_<#=EntityName#>.Output" SsisName="Constraint" />
+        </Inputs>
+     </PrecedenceConstraints>
+        	             
+</Dataflow>

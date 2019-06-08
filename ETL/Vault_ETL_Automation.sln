@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "Vault_Package_Creation", "Vault_Package_Creation\Vault_Package_Creation.dtproj", "{9EDF7422-1BEA-4BFB-93C8-F4E644D44127}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{78F411B6-257B-48FE-9095-17084FE0E729}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EDF7422-1BEA-4BFB-93C8-F4E644D44127}.Development|Default.ActiveCfg = Development
+		{9EDF7422-1BEA-4BFB-93C8-F4E644D44127}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://lerry.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Vault_Package_Creation\\Vault_Package_Creation.dtproj
+		SccProjectName1 = Vault_Package_Creation
+		SccLocalPath1 = Vault_Package_Creation
+	EndGlobalSection
+EndGlobal

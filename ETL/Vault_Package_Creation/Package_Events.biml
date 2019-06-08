@@ -1,0 +1,21 @@
+<#@ include file="Project_Variables.biml" #>
+
+<Events>
+    <Event EventType="OnError" Name="OnError">
+        <Tasks>
+            <ExecuteSQL Name="SQL Log Error Description" ConnectionName="<#=LogCatalog#>">
+                <DirectInput>
+EXEC [log].[InsertFlowExecutionErrorLog]
+  ?, -- ExecutionId - uniqueidentifier
+  ?, -- ErrorCode - int
+  ? -- ErrorDescription - varchar
+                </DirectInput>
+                <Parameters>
+                    <Parameter Name="0" VariableName="System.ExecutionInstanceGUID" DataType="Guid" Length="-1" />
+                    <Parameter Name="1" VariableName="System.ErrorCode" DataType="Int32" Length="-1" />
+                    <Parameter Name="2" VariableName="System.ErrorDescription" DataType="AnsiString" Length="-1" />
+                </Parameters>
+            </ExecuteSQL>
+        </Tasks>
+    </Event>
+</Events>

@@ -1,0 +1,88 @@
+<Script ProjectCoreName="ST_7e8e417881684786a9fe44863707201f" Name="SCR Set LoadDate">
+    <ScriptTaskProject>
+        <ScriptTaskProject ProjectCoreName="ST_7e8e417881684786a9fe44863707201f" Name="ST_7e8e417881684786a9fe44863707201f" VstaMajorVersion="0">
+            <ReadOnlyVariables>
+                <Variable Namespace="$Project" VariableName="LoadDate" DataType="String" />
+            </ReadOnlyVariables>
+            <ReadWriteVariables>
+                <Variable Namespace="User" VariableName="LoadDate" DataType="DateTime" />
+            </ReadWriteVariables>
+            <Files>
+                <File Path="ScriptMain.cs" BuildAction="Compile">#region Namespaces
+using System;
+using System.Data;
+using Microsoft.SqlServer.Dts.Runtime;
+using System.Windows.Forms;
+using System.Globalization;
+#endregion
+
+namespace ST_7e8e417881684786a9fe44863707201f
+{
+	[Microsoft.SqlServer.Dts.Tasks.ScriptTask.SSISScriptTaskEntryPointAttribute]
+	public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase
+	{
+		public void Main()
+		{
+            string loadDateString = (string)Dts.Variables["$Project::LoadDate"].Value;
+            
+            if (loadDateString.Length == 12)
+                loadDateString = loadDateString.Replace(" ", " 000");
+
+            if (loadDateString.Length == 13)
+                loadDateString = loadDateString.Replace(" ", " 00");
+            
+            if (loadDateString.Length == 14)
+                loadDateString = loadDateString.Replace(" ", " 0");
+
+            switch (loadDateString.Length)
+            {
+                case 8:
+                    Dts.Variables["User::LoadDate"].Value = DateTime.ParseExact(loadDateString, "yyyyMMdd", CultureInfo.InvariantCulture);
+                    break;
+                case 15:
+                    Dts.Variables["User::LoadDate"].Value = DateTime.ParseExact(loadDateString, "yyyyMMdd HHmmss", CultureInfo.InvariantCulture);
+                    break;
+                default:
+                    Dts.Events.FireError(18, "LoadDate", string.Format("Bad date format for LoadDate parameter: {0}.", loadDateString), "", 0);
+                    break;
+            }
+
+            Dts.TaskResult = (int)ScriptResults.Success;
+		}
+
+        #region ScriptResults declaration
+        enum ScriptResults
+        {
+            Success = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Success,
+            Failure = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Failure
+        };
+        #endregion
+
+	}
+}
+                </File>
+                <File Path="Properties\AssemblyInfo.cs" BuildAction="Compile">using System.Reflection;
+using System.Runtime.CompilerServices;
+
+[assembly: AssemblyTitle("ST_7e8e417881684786a9fe44863707201f")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ST_7e8e417881684786a9fe44863707201f")]
+[assembly: AssemblyCopyright("")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: AssemblyVersion("1.0.*")]
+                </File>
+            </Files>
+            <AssemblyReferences>
+                <AssemblyReference AssemblyPath="System" />
+                <AssemblyReference AssemblyPath="System.Data" />
+                <AssemblyReference AssemblyPath="System.Windows.Forms" />
+                <AssemblyReference AssemblyPath="System.Xml" />
+                <AssemblyReference AssemblyPath="Microsoft.SqlServer.ManagedDTS.dll" />
+                <AssemblyReference AssemblyPath="Microsoft.SqlServer.ScriptTask.dll" />
+            </AssemblyReferences>
+        </ScriptTaskProject>
+    </ScriptTaskProject>
+</Script>

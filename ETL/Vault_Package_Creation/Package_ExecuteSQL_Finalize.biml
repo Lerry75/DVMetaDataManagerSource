@@ -1,0 +1,35 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="EntityType" type="String" #>
+<#@ property name="EntityName" type="String" #>
+<#@ property name="InputPath" type="String" #>
+
+<#
+string Schema = ((EntityType.ToUpper() == "PIT") || (EntityType.ToUpper() == "BR")) ? MetaAdapter.GetBusinessSchema() : MetaAdapter.GetRawSchema();
+#>
+
+<ExecuteSQL Name="SQL Finalize <#=EntityType#>_<#=EntityName#>" ConnectionName="<#=EDWCatalog#>">
+    
+    <Annotations>
+        <Annotation AnnotationType="Description">Execute SQL Task</Annotation>
+    </Annotations>
+	
+	<DirectInput>
+EXEC <#=Schema#>.[FinalizeEntity_<#=EntityType#>_<#=EntityName#>] @LoadDate = ?;
+	</DirectInput>
+    <Parameters>
+        <Parameter Name="@LoadDate" VariableName="User.LoadDate" DataType="Date" Length="-1" />
+    </Parameters>
+<#
+if (InputPath.Length != 0)
+{
+#>
+    <PrecedenceConstraints>        
+        <Inputs>
+            <Input OutputPathName="<#=InputPath#>" EvaluationValue="Success"/>
+        </Inputs>
+    </PrecedenceConstraints>
+<#
+}
+#>
+        
+</ExecuteSQL>

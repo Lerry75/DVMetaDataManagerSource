@@ -1,0 +1,42 @@
+<#@ include file="Project_Variables.biml" #>
+
+<Container Name="SEQ Initialize">
+            
+    <Annotations>
+        <Annotation AnnotationType="Description">Sequence Container</Annotation>
+    </Annotations>
+    
+    <Tasks>
+        <#=CallBimlScript("Package_ScriptTask_LoadDate.biml")#>
+        
+        <ExecuteSQL Name="SQL Log Start" ConnectionName="<#=LogCatalog#>">
+    	    <DirectInput>
+EXEC [log].[InsertFlowExecutionLog]
+?, -- LoadDate - datetime2
+?, -- FlowName - varchar
+?, -- ExecutionId - uniqueidentifier
+?, -- PackageName - varchar
+?, -- PackageId - uniqueidentifier
+?, -- VersionBuild - int
+0, -- FlowEventId - int
+?  -- ServerExecutionId - int
+            </DirectInput>
+            <Parameters>
+                <Parameter Name="0" VariableName="User.LoadDate" DataType="Date" Length="-1" />
+                <Parameter Name="1" VariableName="EDW_Package_Creation.FlowName" DataType="AnsiString" Length="-1" />
+                <Parameter Name="2" VariableName="System.ExecutionInstanceGUID" DataType="Guid" Length="-1" />
+                <Parameter Name="3" VariableName="System.PackageName" DataType="AnsiString" Length="-1" />
+                <Parameter Name="4" VariableName="System.PackageID" DataType="Guid" Length="-1" />
+                <Parameter Name="5" VariableName="System.VersionBuild" DataType="Int32" Length="-1" />
+                <Parameter Name="6" VariableName="System.ServerExecutionID" DataType="Int32" Length="-1" />
+            </Parameters>
+            <PrecedenceConstraints>
+                <Inputs>
+                    <Input OutputPathName="SCR Set LoadDate.Output" EvaluationValue="Success"/>
+                </Inputs>
+            </PrecedenceConstraints> 
+        </ExecuteSQL>
+
+    </Tasks>
+
+</Container>

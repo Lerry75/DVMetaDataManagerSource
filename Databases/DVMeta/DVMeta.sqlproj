@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>DVMeta</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{877fa9f4-d0d5-41bc-bcc3-0474a6149f10}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>DVMeta</RootNamespace>
+    <AssemblyName>DVMeta</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <IncludeSchemaNameInFileName>True</IncludeSchemaNameInFileName>
+    <Recovery>SIMPLE</Recovery>
+    <ReadCommittedSnapshot>True</ReadCommittedSnapshot>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>
+    </DefaultFilegroup>
+    <GenerateCreateScript>True</GenerateCreateScript>
+    <DacDescription>Data Vault 2.0 Meta Data Manager</DacDescription>
+    <DacVersion>1.1.0.1</DacVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunSqlCodeAnalysis>False</RunSqlCodeAnalysis>
+    <SqlCodeAnalysisRules>
+    </SqlCodeAnalysisRules>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables\" />
+    <Folder Include="Views\" />
+    <Folder Include="Storage\" />
+    <Folder Include="Security" />
+    <Folder Include="Security\Schemas" />
+    <Folder Include="Functions" />
+    <Folder Include="Stored Procedures" />
+    <Folder Include="Scripts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Security\Schemas\meta.sql" />
+    <Build Include="Tables\meta.EntityType.sql" />
+    <Build Include="Tables\meta.DataType.sql" />
+    <Build Include="Tables\meta.EDWEntity.sql" />
+    <Build Include="Tables\meta.EDWAttribute.sql" />
+    <Build Include="Security\Schemas\stage.sql" />
+    <Build Include="Tables\stage.EntityType.sql" />
+    <Build Include="Tables\stage.DataType.sql" />
+    <Build Include="Tables\stage.EDWEntity.sql" />
+    <Build Include="Tables\stage.EDWAttribute.sql" />
+    <Build Include="Security\Schemas\model.sql" />
+    <Build Include="Functions\meta.EntityId.sql" />
+    <Build Include="Functions\meta.EntityName.sql" />
+    <Build Include="Functions\meta.EntityTableName.sql" />
+    <Build Include="Functions\meta.EntityTypeId.sql" />
+    <Build Include="Functions\meta.StagingSchema.sql" />
+    <Build Include="Functions\meta.WarehouseBusinessSchema.sql" />
+    <Build Include="Functions\meta.WarehouseRawSchema.sql" />
+    <Build Include="Stored Procedures\dbo.ExecuteOrPrint.sql" />
+    <Build Include="Functions\meta.EntityTableNameStaging.sql" />
+    <Build Include="Functions\meta.EntityKeyColumn.sql" />
+    <Build Include="Functions\meta.WarehouseDbName.sql" />
+    <Build Include="Functions\meta.StagingDbName.sql" />
+    <Build Include="Functions\meta.MetaDbName.sql" />
+    <Build Include="Tables\meta.EDWEntityRelationship.sql" />
+    <Build Include="Tables\meta.Environment.sql" />
+    <Build Include="Functions\meta.CurrentEnvironment.sql" />
+    <Build Include="Stored Procedures\meta.CheckEnvironment.sql" />
+    <Build Include="Stored Procedures\dbo.DropObject.sql" />
+    <Build Include="Tables\stage.EDWEntityRelationship.sql" />
+    <Build Include="Tables\meta.DataTypeMapping.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWUpdateLoadEndDateProc.sql" />
+    <Build Include="Stored Procedures\meta.CreateStagingTable.sql" />
+    <Build Include="Functions\meta.SqlDataType.sql" />
+    <Build Include="Functions\meta.FileGroupData.sql" />
+    <Build Include="Functions\meta.FileGroupIndex.sql" />
+    <Build Include="Stored Procedures\meta.CreateStagingView.sql" />
+    <Build Include="Functions\meta.EntityViewNameStaging.sql" />
+    <Build Include="Functions\meta.EntityViewName.sql" />
+    <Build Include="Stored Procedures\meta.CreateAllObjectsForEntity.sql" />
+    <Build Include="Stored Procedures\meta.CreateModel.sql" />
+    <Build Include="Tables\meta.Configuration.sql" />
+    <Build Include="Tables\meta.StorageType.sql" />
+    <Build Include="Tables\stage.StorageType.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWTable.sql" />
+    <Build Include="Functions\meta.SqlDataTypeHashKey.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWIndexes.sql" />
+    <Build Include="Functions\meta.StorageTypeId.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWIndexesRowStore.sql" />
+    <Build Include="Functions\dbo.SqlInstanceMajorVersion.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWIndexesColumnStore.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWIndexesColumnRowStore.sql" />
+    <Build Include="Tables\meta.PartitioningType.sql" />
+    <Build Include="Tables\stage.PartitioningType.sql" />
+    <Build Include="Stored Procedures\meta.DeployUtilities.sql" />
+    <Build Include="Functions\meta.HashAlgorithm.sql" />
+    <Build Include="Functions\meta.PartitioningTypeId.sql" />
+    <Build Include="Functions\meta.PartitionSchemeData.sql" />
+    <Build Include="Functions\meta.PartitionSchemeIndex.sql" />
+    <Build Include="Functions\meta.PartitionFunction.sql" />
+    <Build Include="Stored Procedures\meta.CreateTablePartitioning.sql" />
+    <Build Include="Stored Procedures\meta.CreateInitializeEntityProc.sql" />
+    <Build Include="Stored Procedures\meta.CreateTable.sql" />
+    <Build Include="Stored Procedures\meta.CreateBizPitTable.sql" />
+    <Build Include="Stored Procedures\meta.CreateIndexes.sql" />
+    <Build Include="Stored Procedures\meta.CreateBizIndexes.sql" />
+    <Build Include="Stored Procedures\meta.CreateBizIndexesColumnRowStore.sql" />
+    <Build Include="Stored Procedures\meta.CreateBizIndexesColumnStore.sql" />
+    <Build Include="Stored Procedures\meta.CreateBizIndexesRowStore.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWGetPitProc.sql" />
+    <Build Include="Functions\meta.SqlDataTypeHashKeyLength.sql" />
+    <Build Include="Functions\meta.EntityTypeName.sql" />
+    <Build Include="Functions\meta.UsedByEntityTypeId.sql" />
+    <Build Include="Functions\meta.HubLnkEntityTypeId.sql" />
+    <Build Include="Stored Procedures\meta.CreateFinalizeEntityProc.sql" />
+    <Build Include="Stored Procedures\meta.SetDatabaseOptions.sql" />
+    <Build Include="Functions\meta.ValidateModel.sql" />
+    <Build Include="Tables\meta.ProcessType.sql" />
+    <Build Include="Tables\meta.SourceSystemType.sql" />
+    <Build Include="Tables\meta.Process.sql" />
+    <Build Include="Tables\stage.Process.sql" />
+    <Build Include="Tables\stage.ProcessType.sql" />
+    <Build Include="Tables\stage.SourceSystemType.sql" />
+    <Build Include="Tables\meta.ProcessEntityRelationship.sql" />
+    <Build Include="Tables\stage.ProcessEntityRelationship.sql" />
+    <Build Include="Security\Schemas\etl.sql" />
+    <Build Include="Stored Procedures\etl.GetEntityInfo.sql" />
+    <Build Include="Stored Procedures\etl.GetEntities.sql" />
+    <Build Include="Stored Procedures\etl.GetColumns.sql" />
+    <Build Include="Functions\meta.DataTypeSize.sql" />
+    <Build Include="Stored Procedures\etl.GetProcessType.sql" />
+    <Build Include="Stored Procedures\meta.CreateBizBrTable.sql" />
+    <Build Include="Functions\meta.DefaultHashKey.sql" />
+    <Build Include="Functions\meta.CreateEntity.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWGhostRecordInsertProc.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWGhostRecordDeleteProc.sql" />
+    <Build Include="Stored Procedures\etl.GetStagingTablesByProcess.sql" />
+    <Build Include="Stored Procedures\meta.CreateLookupErrorTable.sql" />
+    <Build Include="Functions\meta.WarehouseErrorSchema.sql" />
+    <Build Include="Functions\meta.EntityTableNameLookupError.sql" />
+    <Build Include="Functions\meta.EntityNameLookupError.sql" />
+    <Build Include="Stored Procedures\meta.CreateLookupErrorIndexes.sql" />
+    <Build Include="Stored Procedures\meta.DeploySchemata.sql" />
+    <Build Include="Functions\meta.EntityKeyColumnMasterDuplicate.sql" />
+    <Build Include="Functions\meta.AttributeNameMasterDuplicate.sql" />
+    <Build Include="Functions\meta.VirtualizedLoadEndDate.sql" />
+    <Build Include="Stored Procedures\meta.CreateEDWView.sql" />
+    <Build Include="Functions\meta.EntityTableNameEDW.sql" />
+    <Build Include="Functions\meta.DateRangeStart.sql" />
+    <Build Include="Functions\meta.DateRangeEnd.sql" />
+    <Build Include="Functions\meta.DisabledForeignKey.sql" />
+    <Build Include="Functions\meta.ColumnForHash.sql" />
+    <Build Include="Functions\meta.HashCulture.sql" />
+    <Build Include="Functions\meta.HashDelimiter.sql" />
+    <Build Include="Functions\meta.ValidateConfiguration.sql" />
+    <Build Include="Functions\meta.EntityKeyColumnWithSuffix.sql" />
+    <Build Include="Functions\meta.CleanSuffix.sql" />
+    <Build Include="Functions\meta.CurrentSchemaVersion.sql" />
+    <Build Include="Stored Procedures\meta.DeployFileGroups.sql" />
+    <Build Include="Functions\meta.RowStoreCompressionLevel.sql" />
+    <Build Include="Functions\dbo.SqlInstanceOnPrem.sql" />
+    <Build Include="Functions\dbo.NewLogicalFileName.sql" />
+    <Build Include="Functions\dbo.PhysicalFileName.sql" />
+    <Build Include="Views\dbo.Rand.sql" />
+    <Build Include="Stored Procedures\meta.DeployDatabases.sql" />
+    <Build Include="Functions\meta.FileGroupPrimary.sql" />
+    <Build Include="Functions\meta.ParentEntityId.sql" />
+    <Build Include="Functions\dbo.PhysicalFileNameLog.sql" />
+    <Build Include="Functions\meta.LegacyNonUnicodeInputForHash.sql" />
+    <Build Include="Tables\audit.EDWEntity.sql" />
+    <Build Include="Security\audit.sql" />
+    <Build Include="Tables\audit.ProcessEntityRelationship.sql" />
+    <Build Include="Tables\audit.Process.sql" />
+    <Build Include="Tables\audit.EDWEntityRelationship.sql" />
+    <Build Include="Tables\audit.EDWAttribute.sql" />
+    <Build Include="Tables\audit.Configuration.sql" />
+    <Build Include="Tables\audit.Tag.sql" />
+    <Build Include="Tables\meta.Template.sql" />
+    <Build Include="Tables\audit.Template.sql" />
+    <Build Include="Tables\stage.Template.sql" />
+    <Build Include="Functions\meta.TemplateText.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LocalDB_DV2012_DVMeta.publish.xml" />
+    <None Include="LocalDB_DV2017_DVMeta.publish.xml" />
+    <None Include="LocalDB_DV2014_DVMeta.publish.xml" />
+    <None Include="LocalDB_DV2016_DVMeta.publish.xml" />
+    <None Include="Azure_DVMeta.publish.xml" />
+    <None Include="LocalDB_MSSQLLocalDB_DVMeta.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\PostDeployment_StaticData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+  </ItemGroup>
+</Project>

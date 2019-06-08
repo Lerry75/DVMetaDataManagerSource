@@ -1,0 +1,27 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="EntityTypeName" type="String" #> 
+<#@ property name="EntityName" type="String" #>
+
+<#
+string Schema = MetaAdapter.GetRawSchema();
+#>
+
+<ExecuteSQL Name="SQL Update LoadEndDate" ConnectionName="<#=EDWCatalog#>">
+    
+    <Annotations>
+        <Annotation AnnotationType="Description">Execute SQL Task</Annotation>
+    </Annotations>
+	
+	<DirectInput>
+EXEC <#=Schema#>.[UpdateLoadEndDate_<#=EntityTypeName#>_<#=EntityName#>] ?;
+    </DirectInput>
+    <Parameters>
+        <Parameter Name="@LoadDate" VariableName="User.LoadDate" DataType="Date" Length="-1" />
+    </Parameters>
+    <PrecedenceConstraints>
+        <Inputs>
+        	<Input OutputPathName="DFL <#=EntityTypeName#>_<#=EntityName#>.Output" />
+        </Inputs>
+    </PrecedenceConstraints>
+        
+</ExecuteSQL>

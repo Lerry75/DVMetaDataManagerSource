@@ -1,0 +1,109 @@
+<#@ include file="Project_Variables.biml" #>
+
+
+
+<Package Name="_TEMPLATE_Extract_<#=ProcessName#>" ProtectionLevel="EncryptSensitiveWithUserKey" LoggingMode="Enabled">
+
+    <Connections>
+<#
+foreach (var x in RootNode.Projects.SelectMany(x => x.AllDefinedSuccessors()).OfType<AstConnectionReferenceBaseNode>())
+{
+    WriteLine(x.GetBiml());
+}
+#>
+    </Connections>
+
+    <Tasks>
+        <#=CallBimlScript("Package_Container_SEQ_Initialize.biml")#>
+        
+        <Container Name="SEQ Main">
+                           
+            <Annotations>
+                <Annotation AnnotationType="Description">Sequence Container</Annotation>
+            </Annotations>
+        	               
+        	<Tasks>	
+        	
+                <ExecuteSQL Name="Truncate DST" ConnectionName="<#=StagingCatalog#>">
+                    <Annotations>
+                        <Annotation AnnotationType="Description">Execute SQL Task</Annotation>
+                    </Annotations>
+	                    <DirectInput>
+-- truncate staging table statement(s) here
+                        </DirectInput>
+                </ExecuteSQL>
+                
+        <Container Name="SEQ Staging <#=ProcessName#>">        
+            <Tasks>
+                <#=CallBimlScript("Package_Dataflow_Extract.biml", ProcessName)#>
+            </Tasks>
+                
+                
+            <PrecedenceConstraints>
+                <Inputs>
+            	   <Input OutputPathName="Truncate DST.Output" SsisName="Constraint 111" />
+            	</Inputs>
+            </PrecedenceConstraints>
+                
+		 </Container>
+		
+		<Container Name="SEQ Remove duplicates">
+            <Annotations>
+                <Annotation AnnotationType="Description">Sequence Container</Annotation>
+            </Annotations>
+            <Tasks>
+                <ExecuteSQL Name="SQL <#=ProcessName#> duplicates" ConnectionName="<#=StagingCatalog#>">
+                    <Annotations>
+                        <Annotation AnnotationType="Description">Execute SQL Task</Annotation>
+                    </Annotations>
+	                        <DirectInput>
+-- remove staging duplicates statement here
+                            </DirectInput>
+                </ExecuteSQL>
+                        
+
+            </Tasks>
+                
+                
+                
+                
+                <PrecedenceConstraints>
+                    <Inputs>
+            	        <Input OutputPathName="SEQ Staging <#=ProcessName#>.Output" SsisName="Constraint 1" />
+            		</Inputs>
+            	</PrecedenceConstraints>
+        
+            
+            
+            
+        </Container>
+                
+        </Tasks>
+                   
+            <PrecedenceConstraints>
+                <Inputs>
+                    <Input OutputPathName="SEQ Initialize.Output" EvaluationValue="Success"/>
+                </Inputs>
+            </PrecedenceConstraints>
+        
+        </Container>
+
+        <#=CallBimlScript("Package_Container_SEQ_Finalize.biml")#>
+
+        <#=CallBimlScript("Package_Container_SEQ_Error_Handling.biml")#>
+    </Tasks>
+    
+    <#=CallBimlScript("Package_LogEvents.biml")#>
+
+    <LogProviders>
+       <SqlServerLogProvider ConnectionName="<#=LogCatalog#>" Name="SSIS log provider for SQL Server" />
+    </LogProviders>
+    
+    <Variables>
+        <Variable DataType="DateTime" Name="LoadDate">1800-01-01</Variable>
+        <Variable DataType="String" Name="RecordSource">PLEASE_CHANGE_RECORDSOURCE_890123456789012345678901234567890</Variable>
+    </Variables>
+
+    <#=CallBimlScript("Package_Events.biml")#>
+
+</Package>

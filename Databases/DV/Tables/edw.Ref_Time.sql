@@ -1,0 +1,21 @@
+﻿CREATE TABLE [edw].[Ref_Time]
+(
+	[TimeKey] INT NOT NULL , 
+    [LoadDate] DATETIME2 NOT NULL, 
+    [RecordSource] VARCHAR(50) NOT NULL,
+    [Time] TIME NOT NULL, 
+    [Hour] SMALLINT NOT NULL, 
+	[Minute] SMALLINT NOT NULL,
+	[PartOfDay] CHAR(2) NOT NULL,
+    CONSTRAINT [PK_Ref_Time] PRIMARY KEY NONCLUSTERED ([TimeKey]) WITH (DATA_COMPRESSION = ROW) ON [INDEX]
+) WITH (DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE CLUSTERED INDEX [IX_Ref_Time_LoadDate] ON [edw].[Ref_Time] ([LoadDate]) WITH (DATA_COMPRESSION = ROW) ON [DATA];
+
+GO
+
+CREATE UNIQUE INDEX [IX_Ref_Time_Key] ON [edw].[Ref_Time] ([Time]) WITH (DATA_COMPRESSION = ROW) ON [INDEX];
+
+GO

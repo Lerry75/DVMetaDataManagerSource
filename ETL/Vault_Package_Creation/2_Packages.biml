@@ -1,0 +1,49 @@
+<#@ template language="C#" tier="2"#>
+<#@ include file="Project_Variables.biml" #>
+<#@ code file="MetaAdapter.cs" #>
+
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+
+    <Packages>
+
+<#
+MetaAdapter.ProcessId = ProcessId;
+MetaAdapter.ServerName = ServerName;
+MetaAdapter.MetaCatalog = MetaCatalog;
+string ProcessType = MetaAdapter.GetProcessType();
+
+if (ProcessType.ToUpper() != "BIZ")
+{
+#>
+    <#=CallBimlScript("Package_Template_Extract.biml")#>
+<#
+}
+
+
+foreach (var item in MetaAdapter.GetEntities())
+{
+#>
+    <#=CallBimlScript("Package_Template.biml", item.EntityId)#>
+<#
+}
+
+
+if (ProcessType.ToUpper() != "BIZ")
+{
+#>
+    <#=CallBimlScript("Master_Template.biml", "Extract")#>
+    
+    <#=CallBimlScript("Master_Template.biml", "Hub")#>
+        
+    <#=CallBimlScript("Master_Template.biml", "Lnk")#>
+        
+    <#=CallBimlScript("Master_Template.biml", "Sat")#>
+<#
+}
+#>
+        
+    <#=CallBimlScript("Master_Template.biml", ProcessType)#>
+        
+    </Packages>
+    
+</Biml>

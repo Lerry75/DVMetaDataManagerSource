@@ -1,0 +1,180 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="EntityId" type="Int32" #>
+<#@ property name="EntityName" type="String" #>
+<#@ property name="EntityType" type="String" #>
+<#@ property name="EntityTableName" type="String" #>
+<#@ property name="EntityNameStaging" type="String" #>
+<#@ property name="EntityViewNameStaging" type="String" #>
+
+<#
+var EntityViewColumns = MetaAdapter.GetColumns(EntityId, false);
+var LookupColumns = MetaAdapter.GetColumns(EntityId, true);
+string EntityViewColumnList = MetaAdapter.GetStringColumnList(EntityViewColumns, false);
+string LookupColumnList = MetaAdapter.GetStringColumnList(LookupColumns, false);
+var KeyColumn = LookupColumns.Where(x => x.ReferencedEntityId != 0).First();
+#>
+
+<Dataflow Name="DFL <#=EntityType#>_<#=EntityName#>" LoggingMode="Enabled">
+                    
+	<#=CallBimlScript("Package_Dataflow_LogEvents.biml")#>
+        
+    <LogProviders>
+        <SqlServerLogProvider ConnectionName="<#=LogCatalog#>" Name="SSIS log provider for SQL Server" />
+    </LogProviders>
+    
+    <Annotations>
+        <Annotation AnnotationType="Description">Data Flow Task</Annotation>
+    </Annotations>
+                    
+	<Transformations>
+	
+		<OleDbSource Name="SRC Stg <#=EntityName#>" ConnectionName="<#=StagingCatalog#>">
+			<DirectInput>
+SELECT DISTINCT 
+  <#=EntityViewColumnList#>
+FROM <#=EntityViewNameStaging#>
+WHERE LoadDate = ?
+ORDER BY <#=LookupColumnList#>
+            </DirectInput>
+            <Parameters>
+                <!--Parameter Name="Parameter0:Input" /!-->
+                <Parameter Name="0" VariableName="User.LoadDate"/>    
+            </Parameters>
+            <Columns>
+<#
+int i = 1;
+foreach (var item in LookupColumns) 
+{
+#>
+                <Column SourceColumn="<#=item.ColumnName#>" SortKeyPosition="<#=i#>" />
+<#
+    i++;
+}
+#>
+            </Columns>
+        </OleDbSource>	
+	
+		<OleDbSource Name="SRC Edw <#=EntityName#>" ConnectionName="<#=EDWCatalog#>">
+			<DirectInput>
+SELECT 
+  <#=LookupColumnList#>
+FROM <#=EntityTableName#>
+WHERE LoadDate = ?
+ORDER BY <#=LookupColumnList#>
+            </DirectInput>
+            <Parameters>
+                <!--Parameter Name="Parameter0:Input" /!-->
+                <Parameter Name="0" VariableName="User.LoadDate"/>    
+            </Parameters>
+            <Columns>
+<#
+i = 1;
+foreach (var item in LookupColumns) 
+{
+#>
+                <Column SourceColumn="<#=item.ColumnName#>" TargetColumn="Lkp_<#=item.ColumnName#>" SortKeyPosition="<#=i#>" />
+<#
+    i++;
+}
+#>
+            </Columns>
+        </OleDbSource>
+        
+<#
+string InputPath = "SRC Stg " + EntityName + ".Output";
+
+foreach (var item in LookupColumns.Where((x => x.ReferencedEntityId != 0))) 
+{
+    EntityInfo RefEntity = MetaAdapter.GetEntityInfo(item.ReferencedEntityId);
+    var RefColumns = MetaAdapter.GetColumns(item.ReferencedEntityId, false);
+    string RefColumnName = string.Empty;
+    string RefColumnNameBraket = string.Empty;
+    
+    foreach (var col in RefColumns.Where((x => x.IsHashKey)))
+    {
+        RefColumnName = col.ColumnName;
+        RefColumnNameBraket = col.ColumnNameBraket;
+        
+        break;
+    }
+#>
+        <Lookup Name="LKP <#=RefEntity.EntityName#>_<#=item.ColumnName#>" NoMatchBehavior="RedirectRowsToNoMatchOutput" OleDbConnectionName="<#=EDWCatalog#>">
+            <DirectInput>
+SELECT <#=RefColumnNameBraket#>
+FROM <#=RefEntity.EntityTableName#></DirectInput>
+            <Parameters>
+                <Parameter SourceColumn="<#=item.ColumnName#>" />
+			</Parameters>
+            <InputPath SsisName="Lookup Input" OutputPathName="<#=InputPath#>" />
+            <Inputs>
+                <Column SourceColumn="<#=item.ColumnName#>" TargetColumn="<#=RefColumnName#>" />
+			</Inputs>
+		</Lookup>
+<#
+    InputPath = "LKP " + RefEntity.EntityName + "_" + item.ColumnName + ".Match";
+}
+#>
+      
+		<MergeJoin Name="MRG <#=EntityName#>" JoinType="LeftOuterJoin">
+            <LeftInputPath SsisName="Merge Join Left Input" OutputPathName="<#=InputPath#>">
+                <Columns>
+<#
+foreach (var item in EntityViewColumns)
+{
+#>
+                    <Column SourceColumn="<#=item.ColumnName#>" IsUsed="true" />
+<#
+}
+#>
+                </Columns>
+            </LeftInputPath>
+            
+            <RightInputPath SsisName="Merge Join Right Input" OutputPathName="SRC Edw <#=EntityName#>.Output">
+                <Columns>
+<#
+string isUsed = "true";
+foreach (var item in LookupColumns) 
+{
+#>
+                    <Column SourceColumn="Lkp_<#=item.ColumnName#>" IsUsed="<#=isUsed#>" />
+<#
+    isUsed = "false";
+}
+#>
+                </Columns>
+            </RightInputPath>
+            <JoinKeys>
+<#
+foreach (var item in LookupColumns) 
+{
+#>
+                <JoinKey LeftColumn="<#=item.ColumnName#>" RightColumn="<#=item.ColumnName#>" />
+<#
+}
+#>
+            </JoinKeys>
+        </MergeJoin>
+                        
+		<ConditionalSplit Name="CON New Rows">
+            <InputPath SsisName="Conditional Split Input" OutputPathName="MRG <#=EntityName#>.Output" />
+            <OutputPaths>
+                <OutputPath Name="New Rows">
+                    <Expression>(ISNULL(Lkp_<#=LookupColumns.First().ColumnName#>))</Expression>
+                </OutputPath>
+            </OutputPaths>
+        </ConditionalSplit>
+						  
+        <OleDbDestination Name="DST Edw <#=EntityName#>" ConnectionName="<#=EDWCatalog#>" KeepNulls="true">
+	        <InputPath SsisName="OLE DB Destination Input" OutputPathName="CON New Rows.New Rows" />
+	        <ExternalTableOutput Table="<#=EntityTableName#>" />
+        </OleDbDestination>
+                  
+	</Transformations>
+					
+    <PrecedenceConstraints>
+        <Inputs>
+        	<Input OutputPathName="SQL Initialize <#=EntityType#>_<#=EntityName#>.Output" SsisName="Constraint 1" />
+        </Inputs>
+    </PrecedenceConstraints>
+					
+</Dataflow>

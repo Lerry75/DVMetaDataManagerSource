@@ -1,0 +1,10 @@
+<#@ template language="C#" tier="0"#>
+<#@ include file="Project_Variables.biml" #>
+
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Connections>
+        <OleDbConnection Name="<#=EDWCatalog#>" CreateInProject="true" ConnectionString="Data Source=<#=ServerName#>;Initial Catalog=<#=EDWCatalog#>;Integrated Security=SSPI;Provider=SQLNCLI11.1;"/>    
+        <OleDbConnection Name="<#=LogCatalog#>" CreateInProject="true" ConnectionString="Data Source=<#=ServerName#>;Initial Catalog=<#=LogCatalog#>;Integrated Security=SSPI;Provider=SQLNCLI11.1;"/>
+        <OleDbConnection Name="<#=StagingCatalog#>" CreateInProject="true" ConnectionString="Data Source=<#=ServerName#>;Initial Catalog=<#=StagingCatalog#>;Integrated Security=SSPI;Provider=SQLNCLI11.1;"/>
+    </Connections>
+</Biml>

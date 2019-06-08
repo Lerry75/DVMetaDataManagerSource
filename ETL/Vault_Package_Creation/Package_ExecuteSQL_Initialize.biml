@@ -1,0 +1,22 @@
+<#@ include file="Project_Variables.biml" #>
+<#@ property name="EntityType" type="String" #> 
+<#@ property name="EntityName" type="String" #>
+
+<#
+string Schema = ((EntityType.ToUpper() == "PIT") || (EntityType.ToUpper() == "BR")) ? MetaAdapter.GetBusinessSchema() : MetaAdapter.GetRawSchema();
+#>
+
+<ExecuteSQL Name="SQL Initialize <#=EntityType#>_<#=EntityName#>" ConnectionName="<#=EDWCatalog#>">
+    
+    <Annotations>
+        <Annotation AnnotationType="Description">Execute SQL Task</Annotation>
+    </Annotations>
+    
+	<DirectInput>
+EXEC <#=Schema#>.[InitializeEntity_<#=EntityType#>_<#=EntityName#>] @LoadDate = ?;
+	</DirectInput>
+    <Parameters>
+        <Parameter Name="@LoadDate" VariableName="User.LoadDate" DataType="Date" Length="-1" />
+    </Parameters>
+        
+</ExecuteSQL>

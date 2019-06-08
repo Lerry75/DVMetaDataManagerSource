@@ -1,0 +1,7 @@
+﻿CREATE TABLE [audit].[Tag]
+(
+  [LoadDate] DATETIME2 (7) NOT NULL,
+  [TagId] VARCHAR (50) NOT NULL,
+  [TagName] VARCHAR (255) NULL,
+  CONSTRAINT [PK_Tag] PRIMARY KEY CLUSTERED ([LoadDate] ASC, [TagId] ASC)
+)

@@ -1,0 +1,72 @@
+<LogEvents>
+    <LogEvent EventName="BufferSizeTuning">
+        <EventColumns>
+            <EventColumn>Computer</EventColumn>
+            <EventColumn>Operator</EventColumn>
+            <EventColumn>SourceName</EventColumn>
+            <EventColumn>SourceID</EventColumn>
+            <EventColumn>ExecutionID</EventColumn>
+            <EventColumn>MessageText</EventColumn>
+        </EventColumns>
+    </LogEvent>
+    <LogEvent EventName="OnError">
+        <EventColumns>
+            <EventColumn>Computer</EventColumn>
+            <EventColumn>Operator</EventColumn>
+            <EventColumn>SourceName</EventColumn>
+            <EventColumn>SourceID</EventColumn>
+            <EventColumn>ExecutionID</EventColumn>
+            <EventColumn>MessageText</EventColumn>
+        </EventColumns>
+    </LogEvent>
+    <LogEvent EventName="OnInformation">
+        <EventColumns>
+            <EventColumn>Computer</EventColumn>
+            <EventColumn>Operator</EventColumn>
+            <EventColumn>SourceName</EventColumn>
+            <EventColumn>SourceID</EventColumn>
+            <EventColumn>ExecutionID</EventColumn>
+            <EventColumn>MessageText</EventColumn>
+        </EventColumns>
+    </LogEvent>
+    <LogEvent EventName="OnPostExecute">
+        <EventColumns>
+            <EventColumn>Computer</EventColumn>
+            <EventColumn>Operator</EventColumn>
+            <EventColumn>SourceName</EventColumn>
+            <EventColumn>SourceID</EventColumn>
+            <EventColumn>ExecutionID</EventColumn>
+            <EventColumn>MessageText</EventColumn>
+        </EventColumns>
+    </LogEvent>
+    <LogEvent EventName="OnPreExecute">
+        <EventColumns>
+            <EventColumn>Computer</EventColumn>
+            <EventColumn>Operator</EventColumn>
+            <EventColumn>SourceName</EventColumn>
+            <EventColumn>SourceID</EventColumn>
+            <EventColumn>ExecutionID</EventColumn>
+            <EventColumn>MessageText</EventColumn>
+        </EventColumns>
+    </LogEvent>
+    <LogEvent EventName="OnTaskFailed">
+        <EventColumns>
+            <EventColumn>Computer</EventColumn>
+            <EventColumn>Operator</EventColumn>
+            <EventColumn>SourceName</EventColumn>
+            <EventColumn>SourceID</EventColumn>
+            <EventColumn>ExecutionID</EventColumn>
+            <EventColumn>MessageText</EventColumn>
+        </EventColumns>
+    </LogEvent>
+    <LogEvent EventName="PipelineBufferLeak">
+        <EventColumns>
+            <EventColumn>Computer</EventColumn>
+            <EventColumn>Operator</EventColumn>
+            <EventColumn>SourceName</EventColumn>
+            <EventColumn>SourceID</EventColumn>
+            <EventColumn>ExecutionID</EventColumn>
+            <EventColumn>MessageText</EventColumn>
+        </EventColumns>
+    </LogEvent>
+</LogEvents>

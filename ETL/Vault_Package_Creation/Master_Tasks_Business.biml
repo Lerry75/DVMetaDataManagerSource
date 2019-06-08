@@ -1,0 +1,12 @@
+<Tasks>
+<#
+foreach (var item in MetaAdapter.GetEntities().Where(x => (x.EntityType == "Br") || (x.EntityType == "Pit")))
+{
+#>
+    <ExecutePackage Name="PCK <#=item.EntityType#>_<#=item.EntityName#>" LoggingMode="Disabled">
+        <ExternalProjectPackage Package="<#=item.EntityType#>_<#=item.EntityName#>_Load.dtsx" />
+    </ExecutePackage>
+<#
+}
+#>
+</Tasks>
